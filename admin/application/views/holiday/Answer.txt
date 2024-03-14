@@ -1,0 +1,42 @@
+## Bing
+To update data in CodeIgniter using the Model-View-Controller (MVC) pattern, you can follow these steps:
+- Create a controller method that loads the view for updating the data. This method should retrieve the data to be updated from the database using the get_where() method of the Query Builder class. Here's an example:
+
+public function edit($id) {
+    $data['item'] = $this->db->get_where('mytable', array('id' => $id))->row_array();
+    $this->load->view('edit', $data);
+}
+
+In this example, the edit() method retrieves a single row from the mytable table where the id column matches the $id parameter. The row is returned as an associative array and passed to the edit view.
+- Create a view that displays a form for updating the data. The form should include input fields for each column in the table, and a submit button. Here's an example:
+
+<form method="post" action="<?php echo base_url('update/' . $item['id']); ?>">
+    <label>Name:</label>
+    <input type="text" name="name" value="<?php echo $item['name']; ?>">
+    <br>
+    <label>Age:</label>
+    <input type="text" name="age" value="<?php echo $item['age']; ?>">
+    <br>
+    <button type="submit">Save</button>
+</form>
+
+In this example, the form submits the data to the update() method of the controller.
+- Create a controller method that updates the data in the database. This method should retrieve the data from the form using the input->post() method, and update the row in the database using the update() method of the Query Builder class. Here's an example:
+
+public function update($id) {
+    $data = array(
+        'name' => $this->input->post('name'),
+        'age' => $this->input->post('age')
+    );
+    $this->db->where('id', $id);
+    $this->db->update('mytable', $data);
+    redirect('home');
+}
+
+In this example, the update() method retrieves the data from the form using the input->post() method, and updates the row in the mytable table where the id column matches the $id parameter.
+- Create a link in the view that loads the edit view for the selected row. Here's an example:
+
+<a href="<?php echo base_url('edit/' . $item['id']); ?>">Edit</a>
+
+In this example, the link passes the id of the row to be edited to the edit() method of the controller.
+I hope this helps! Let me know if you have any further questions.
